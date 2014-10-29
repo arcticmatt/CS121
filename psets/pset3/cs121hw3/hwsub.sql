@@ -155,4 +155,3 @@ SELECT CASE
     END AS day_type, COUNT(sub_id) AS num_submits
 FROM fileset
 GROUP BY is_weekend(DATE(sub_date));
-
