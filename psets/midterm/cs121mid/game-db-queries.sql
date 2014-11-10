@@ -88,5 +88,5 @@ FROM
         END
     AS points
     FROM game_score AS g NATURAL JOIN game NATURAL JOIN game_type
-    WHERE game_type.min_players > 1)
+    WHERE game_type.min_players > 1) AS game_points
 ORDER BY total_points DESC;
