@@ -1,0 +1,385 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Preamble
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm,fullpage}
+\usepackage[a4paper,bindingoffset=0in,left=1in,right=1in,top=1in,
+bottom=1in,footskip=0in]{geometry}
+\newtheorem*{prop}{Proposition}
+%\newcounter{Examplecount}
+%\setcounter{Examplecount}{0}
+\newenvironment{discussion}{\noindent Discussion.}{}
+\setlength{\headheight}{12pt}
+\setlength{\headsep}{10pt}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CS121 Pset 6}
+\rhead{Matt Lim}
+\pagenumbering{gobble}
+\pagenumbering{gobble}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 1
+\section*{Problem 1}
+\begin{description}
+    \item[(a)] There are no non-trivial functional dependencies.
+    \item[(a)] $F = \{B \rightarrow A\}$
+    \item[(a)] $F = \{A \rightarrow B\}$
+    \item[(a)] $F = \{A \rightarrow B, B \rightarrow A\}$.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 2
+\section*{Problem 2}
+\begin{description}
+    \item[(a)] Here we will prove that the Union rule is sound. So,
+        we want to prove that
+        \[ A \rightarrow B \text{ and } A \rightarrow C \implies
+        A \rightarrow BC \]
+        So, we have that $A \rightarrow B$ and $A \rightarrow C$. Then we have
+        that by augmentation on the first depedency, $AC \rightarrow BC$ and
+        that by augmentation on the second depedency,
+        $AA \rightarrow AC \implies A \rightarrow AC$. Then, using transitivity
+        with these two augmentations, we have that $A \rightarrow BC$, as desired.
+    \item[(b)] Here we will prove that the Decomposition rule is sound. So,
+        we want to prove that
+        \[ A \rightarrow BC \text{ and } A \rightarrow B \implies
+        A \rightarrow C \]
+        So, we have that $A \rightarrow BC$ and $A \rightarrow B$. Then, using
+        the reflexivity rule, we have that $BC \rightarrow B$ and
+        $BC \rightarrow C$. Using transitivity with these two dependencies and
+        the original two dependencies, we
+        get that $A \rightarrow B$ and $A \rightarrow C$, as desired.
+    \item[(c)] Here we will prove that the Pseudotransitivity rule is sound.
+        So, we want to prove that
+        \[ A \rightarrow B \text{ and } CB \rightarrow D \implies
+        AC \rightarrow D \]
+        So, we have that $A \rightarrow B$ and $CB \rightarrow D$. Then, using
+        augmentation on the first dependency, we have that $AC \rightarrow BC$.
+        Then, using transitivity with $CB \rightarrow D$, we have
+        that $AC \rightarrow D$, as desired.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 3
+\section*{Problem 3}
+\begin{description}
+    \item[(a)] We have that:
+        \[ A^+ = ABCDE \]
+        \[ B^+ = BD \]
+        \[ C^+ = C \]
+        \[ D^+ = D \]
+        \[ E^+ = EABCD \]
+        Thus, we have that our candidate keys are $A, E, CD, BC$. $A$ and $E$
+        are candidate keys for obvious reasons. $CD$ is a candidate key
+        because $CD \rightarrow E$ and $E$ is a superkey and neither $C$
+        or $D$ is a superkey. $BC$ is a candidate key because with $B$
+        and $C$ you can get $E$ (because $B \rightarrow D$) and $E$ is a superkey
+        and neither $B$ or $D$ is a superkey.
+
+        To properly show each candidate key is a superkey for $R$, we can compute
+        each keys attribute-set closure.
+        So:
+        \[ A^+ = ABCDE \]
+        We can see this because $A \rightarrow BC$ causes $A^+ = ABC$, then
+        $B \rightarrow D$ causes $A^+ = ABCD$, then $CD \rightarrow E$ causes
+        $A^+ = ABCDE$.
+        \[ E^+ = ABCDE \]
+        We can see this because $E \rightarrow A$ and $A$ is a superkey.
+        \[ (CD)^+ = ABCDE \]
+        We can see this because $CD \rightarrow E$ and $E$ is a superkey.
+        \[ (BC)^+ = ABCDE \]
+        We can see this because $B \rightarrow D$ causes $(BC)^+ = BCD$, then
+        $CD \rightarrow E$ causes $(BC)^+ = ABCDE$ because $E$ is a
+        superkey.
+    \item[(b)]
+        We want to describe all functional dependencies that will appear in the
+        closure $F^+$ of $F$. So, we can summarize this as the following.
+        First, we have all dependencies
+        $\alpha \rightarrow \beta$
+        where $\alpha$ is an element from the set of all superkeys
+        and $\beta$ is $ABCDE$, and all dependencies generated from this by applying
+        the Decomposition Rule. Then we also have all the dependencies in $F$ and
+        all trivial dependencies $\alpha \rightarrow \beta$ where $\alpha
+        \subseteq \{ABCDE\}$ and $\beta \subseteq A$.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 4
+\section*{Problem 4}
+Here is a counterexample. Here is a table where
+$A \twoheadrightarrow BC$ holds.
+
+\begin{tabular}{ | l | l | c | c | c | }
+  \hline
+    & $A$ & $B$ & $C$ & $R - (A \cup BC)$ \\ \hline
+  $t_1$ & 1 & 2 & 7 & 9 \\
+  $t_2$ & 1 & 7 & 5 & 2 \\
+  $t_3$ & 1 & 2 & 7 & 2 \\
+  $t_4$ & 1 & 7 & 5 & 9 \\
+  \hline
+\end{tabular}
+
+Now assume to the contrary that $A \twoheadrightarrow B$. Then we have that
+$t_1[R - B] = t_4[R - B]$. But we can see here that $t_1[R - B] = 179$ and
+that $t_4[R - B] = 159$. So we get a contradiction. So clearly
+the original statement is false.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 5
+\section*{Problem 5}
+\begin{description}
+    \item[(a)] Here we wish to compute a canonical cover of
+        \[ F = \{ A \rightarrow E, BC \rightarrow D, C \rightarrow A,
+        AB \rightarrow D, D \rightarrow G, BC \rightarrow E, D \rightarrow E,
+        BC \rightarrow A \]
+        So first, we can get rid of $BC \rightarrow E$. This dependency is
+        extraneous because $BC \rightarrow A$ and $A \rightarrow E$. So clearly
+        these two dependencies and transitivity logically imply the extraneous
+        one. Now we have
+        \[ F_c = \{ A \rightarrow E, BC \rightarrow D, C \rightarrow A,
+        AB \rightarrow D, D \rightarrow G, D \rightarrow E, BC \rightarrow A\} \]
+        Secondly, we can get rid of $BC \rightarrow A$. This is extraneous
+        because $BC \rightarrow C$ and $C \rightarrow A$. Clearly, these
+        two dependencies with transitivity imply the extraneous one.
+        Now we have
+        \[ F_c = \{ A \rightarrow E, BC \rightarrow D, C \rightarrow A,
+        AB \rightarrow D, D \rightarrow G, D \rightarrow E\} \]
+        Thirdly, we can add $D \rightarrow GE$ in replacement of
+        $D \rightarrow G$ and $D \rightarrow E$. This is because we have
+        $D \rightarrow E$ and $D \rightarrow G$, so by the Union rule, we can
+        add $D \rightarrow GE$ (and by the Decomposition rule, putting this in
+        is logically equivalent to having both $D \rightarrow G$ and
+        $D \rightarrow E$. Now we have
+        \[ F_c = \{ A \rightarrow E, BC \rightarrow D, C \rightarrow A,
+        AB \rightarrow D, D \rightarrow GE \} \]
+        Finally, we can get rid of $BC \rightarrow D$. This is because we
+        have that $C \rightarrow A$. Applying augmentation to this gives us
+        $CB \rightarrow AB$. Then, by transitivity, (and using the dependency
+        $AB \rightarrow D$) we have that $CB \rightarrow D$. So that dependency
+        is extraneous because other dependencies in $F_c$ logically imply it.
+        Thus, finally, we are left with
+        \[ F_c = \{ A \rightarrow E, C \rightarrow A, AB \rightarrow D,
+        D \rightarrow GE \} \]
+        and by looking at it, we can see that it is a valid canonical cover.
+    \item[(b)] We have that a candidate key for $R$ is $BC$. Now we will
+        compute its attribute-set closure, $(BC)^+$. We can see that
+        $C \rightarrow A$ causes $(BC)^+ = BCA$, then $AB \rightarrow D$ causes
+        $(BC)^+ = BCAD$, then $D \rightarrow GE$ causes $(BC)^+ = ABCDEG$.
+        So we have computed the attribute-set closure for our candidate key.
+        Now we must demonstrate that it is a candidate key by computing the
+        attribute-set closures of its proper subsets. So, let us begin.
+        First we will compute $B^+$. We have that $B^+ = B$; this is clear
+        given $F$. Next, we will compute $C^+$. We have that $C \rightarrow A$
+        causes $C^+ = CA$, then $A \rightarrow E$ causes $C^+ = CAE$.
+        Neither $B^+$ nor $C^+$ is a superkey, so we have that $BC$ is a valid
+        candidate key for $R$.
+    \item[(c)] We want to decompose $R$ into a BCNF schema. We will do this
+        in the following way. We have that $A \rightarrow E$ is not a trivial
+        dependency, and that $A$ isn't a superkey for $R$. So we can decompose
+        $R$ into $R_1 = (\underline{A}, E)$, $R_2 = (\underline{B},
+        \underline{C}, A, D, G)$. Then we have that $D \rightarrow GE$ is not
+        a trivial dependency, and that $D$ isn't a superkey for $R_2$. So
+        we can decompose further into $R_1 = (\underline{A}, E)$,
+        $R_2 = (\underline{D}, G, E)$, $R_3 = (\underline{B}, \underline{C},
+        A, D)$. Then we have that $AB \rightarrow D$ isn't a trival dependency,
+        and that $AB$ isn't a superkey for $R_3$. So we can decompose further
+        into $R_1 = (\underline{A}, E)$, $R_2 = (\underline{D}, G, E)$,
+        $R_3 = (\underline{A}, \underline{B}, D)$, $R_4 = \{\underline{B},
+        \underline{C}, A)$. Then we have that $C \rightarrow A$ isn't a trivial
+        dependency, and that $C$ isn't a superkey for $R_4$. So finally, we
+        end up with $R_1 = (\underline{A}, E)$, $R_2 = (\underline{D}, G, E)$,
+        $R_3 = (\underline{A}, \underline{B}, D)$, $R_4 = (\underline{C}, A)$,
+        $R_5 = (\underline{B}, \underline{C})$. We can now see that there are
+        no dependencies that break BCNF. So each of our final relation-schemas
+        is in BCNF. More specifically, for $R_1$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_1$ ($A \rightarrow E$).
+        For $R_2$, the only non-trivial
+        dependencies $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_2$ ($D \rightarrow E$, $D \rightarrow G$).
+        For $R_3$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_3$ ($AB \rightarrow D$).
+        For $R_4$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_4$ ($C \rightarrow A$). And for $R_5$, we
+        clearly don't have any dependencies that break BCNF.
+
+        As far as which dependencies in $F_c$ are not preserved by this
+        decomposition, we have that it preserves all of them (because each
+        dependency appears in one of our decomposed schemas). So basically,
+        if $F' = F_1 \cup F_2 \cup \cdots \cup F_5$, we have that
+        $F'^+ = F^+$.
+    \item[(d)] We want to decompose $R$ into a BCNF schema. We will do this
+        in the following way. We have that $A \rightarrow E$ is not a trivial
+        dependency, and that $A$ isn't a superkey for $R$. So we can decompose
+        $R$ into $R_1 = (\underline{A}, E)$, $R_2 = (\underline{B},
+        \underline{C}, A, D, G)$. Then we have that $C \rightarrow A$ is
+        not a trivial dependency, and that $C$ is not a superkey for $R_2$.
+        So we can decompose further into $R_1 = (\underline{A}, E)$,
+        $R_2 = (\underline{C}, A)$, $R_3 = (\underline{B}, \underline{C},
+        D, G)$. Then we have that $D \rightarrow G$ is not a trivial
+        dependency, and that $D$ is not a superkey for $R_3$. So we can
+        decompose further into $R_1 = (\underline{A}, E)$,
+        $R_2 = (\underline{C}, A)$, $R_3 = (\underline{D}, G)$,
+        $R_4 = (\underline{B}, \underline{C}, D)$. We can now see that this
+        is our final answer. This is because we can now see that there are
+        no dependencies that break BCNF. So each of our final relation-schemas
+        is in BCNF. More specifically, for $R_1$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_1$ ($A \rightarrow E$).
+        For $R_2$, the only non-trivial
+        dependencies $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_2$ ($C \rightarrow A$).
+        For $R_3$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_3$ ($D \rightarrow G$).
+        For $R_4$, the only non-trivial
+        dependency $\alpha \rightarrow \beta$ that holds has $\alpha$ as
+        the superkey of $R_4$ ($BC \rightarrow D$).
+
+        Now we will specify which dependencies in $F_c$ are not preserved by
+        this decomposition. We have that this decomposition does not preserve
+        $AB \rightarrow D$ and $D \rightarrow GE$ because these dependencies
+        are not included $F'^+$, where $F' = F_1 \cup \cdots \cup F_4$.
+    \item[(e)]
+        We have that our $F_c = \{A \rightarrow E, C \rightarrow A,
+        AB \rightarrow D, D \rightarrow GE\}$. Now, using the 3NF Synthesis
+        Algorithm, we can create a 3NF Schema for $R$. Following slide 19
+        in lecture $20$, we get
+        $R_1 = (\underline{A},E)$, $R_2 = (\underline{C}, A)$,
+        $R_3 = (\underline{A}, \underline{B}, D)$, $R_4 = (\underline{D}, G, E)$,
+        $R_5 = (\underline{B}, \underline{C})$. We get the first four
+        relation schemas from $F_c$, because none of the dependencies in $F_c$
+        contain each other completely. Then we get the last one by adding
+        in the candidate key for $R$ because no schema in $R_1$ through $R_4$
+        contains a candidate key for $R$.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 6
+\section*{Problem 6}
+\begin{description}
+    \item[(a)] Our first candidate key is $course\_id, section\_id, term, year$.
+        We can show that this is a superkey by finding the attribute-set closure.
+        We have that the attribute-set closure is $\{course\_id, section\_id,
+        term, \\ year, meet\_time, room, num\_students, instructor\_id\}$ from the
+        second dependency. Then we have that the attribute-set closure is
+        $\{course\_id, section\_id, term, year, meet\_time, room, num\_students, \\
+        instructor\_id, course\_id\}$ from the third dependency. Then we have
+        that the attribute-set closure is everything ($\{course\_id, section\_id,
+        term, year, meet\_time, room, num\_students, instructor\_id, course\_id, \\
+        dept, units, course\_level\}$) from the first dependency.
+
+        Our second candidate key is $room, meet\_time, term, year$. We can show
+        that this is a superkey by finding the attribute-set closure. We have
+        that the attribute-set closure is $\{room, meet\_time, term, year, \\
+        instructor\_id, course\_id, section\_id\}$ from the third dependency.
+        Then we have that the attribute-set closure is
+        everything ($\{course\_id, section\_id,
+        term, year, meet\_time, room, num\_students, instructor\_id, \\ course\_id,
+        dept, units, course\_level\}$) from the first and second dependencies.
+    \item[(b)] We have that one canonical cover $F_{c1}$ is as follows:
+        \[ \{ course\_id \} \rightarrow \{ dept, units, course\_level \} \]
+        \[ \{ course\_id, section\_id, term, year \} \rightarrow
+        \{ meet\_time, room, num\_students, instructor\_id \} \]
+        \[ \{ room, meet\_time, term, year \} \rightarrow \{ course\_id,
+        section\_id \} \]
+        We have that the $instructor\_id$ in the third dependency is extraneous
+        because it is in the attribute-set closure of $A = \{room, meet\_time,
+        term, year\}$. This is true because with the third dependency in
+        $F_{c1}$ we have that the attribute-set closure of $A$ is
+        $\{room, meet\_time, term, year, course\_id, section\_id\}$. Then, with
+        the second dependency in $F_{c1}$, we have that the attribute-set
+        closure is $\{room, meet\_time, \\ term, year, course\_id, section\_id,
+        num\_students, instructor\_id \}$ ($instructor\_id$ is in there!).
+
+        \vspace{3mm}
+        We have that one canonical cover $F_{c2}$ is as follows:
+        \[ \{ course\_id \} \rightarrow \{ dept, units, course\_level \} \]
+        \[ \{ course\_id, section\_id, term, year \} \rightarrow
+        \{ meet\_time, room, num\_students \} \]
+        \[ \{ room, meet\_time, term, year \} \rightarrow \{ instructor\_id,
+        course\_id, section\_id \} \]
+        We have that the $instructor\_id$ in the second dependency is extraneous
+        because it is in the attribute-set closure of $A = \{course\_id,
+        section\_id, term, year \}$. This is true because with the second
+        dependency in $F_{c2}$ we have that the attribute-set closure of $A$ is
+        $\{course\_id, section\_id, term, year, meet\_time,\\
+        room, num\_students\}$.
+        Then, with the third dependency in $F_{c2}$, we have that the attribute-set
+        closure is
+        $\{course\_id, section\_id, term, year, meet\_time, room,
+        num\_students, instructor\_id\}$ ($instructor\_id$ is in there!).
+
+        \vspace{3mm}
+        We have that $F_{c1}$ is most appropriate because it makes more sense
+        to explicitly and visibly associate $instructor\_id$ with $course\_id$ and
+        $section\_id$ than with $room$ and $meet\_time$. This is because
+        an instructor is more strongly correlated with a class and a section
+        than with a room and a time.
+    \item[(c)]
+        We will use 3NF here. The schema decomposition that results in using
+        this is
+        \[ R_1 = (\underline{course\_id}, dept, units, course\_level) \]
+        \[ R_2 = (\underline{course\_id, section\_id, term, year}, meet\_time,
+            room, num\_students) \]
+        \[ R_3 = (\underline{room, meet\_time, term, year}, course\_id,
+            section\_id) \]
+        The primary keys are underlined, as are the candidate keys. We have
+        a foreign key $R_2[course\_id]$ references $R_1[course\_id]$.
+        We also have a foreign key $R_3[course\_id]$ references $R_1[course\_id]$.
+        We have a foreign key $R_3[course\_id, section\_id, term, year]$
+        references $R_2[course\_id, section\_id, term, year]$.
+
+        3NF makes the most since here because in this case, we would rather
+        preserve the dependencies than get rid of redudancies (like BCNF does).
+        3NF also makes checking constraints faster because it eliminates the
+        needs for joins. In this case, since the scale isn't dramatically large
+        (it is just a database for courses after all) we are not too hampered
+        by redundancies.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 7
+\section*{Problem 7}
+We have that $email\_id \twoheadrightarrow to\_addr$ is not a trivial
+multivalued dependency and $email\_id$ is not a superkey for $R$.
+So, we can first decompose this as follows, using the second given dependency:
+\[ email\_recipients = (\underline{email\_id, to\_addr}) \]
+\[ email\_info = (\underline{email\_id, attachment\_name}, send\_date,
+    from\_addr, subject, email\_body, attachment\_body) \]
+Then we have that $email\_id, attachment\_name \rightarrow attachment\_body$.
+And since if $\alpha \rightarrow \beta$ then $\alpha \twoheadrightarrow \beta$,
+then we can decompose this as follows, using the third given dependency:
+\[ email\_recipients = (\underline{email\_id, to\_addr}) \]
+\[ email\_attachments = (\underline{email\_id, attachment\_name},
+    attachment\_body) \]
+\[ email\_info = (email\_id, send\_date,
+    from\_addr, subject, email\_body, attachment\_name) \]
+Then we have that $email\_id$ isn't a superkey for $email\_info$ because
+$attachment\_name$ is still in there, so we get non-trivial multivalued
+dependencies of the form $\alpha \twoheadrightarrow \beta$ where $\alpha$
+is not a superkey of $email\_id$. So then we can decompose this as follows,
+using the first given dependency:
+\[ email\_recipients = (\underline{email\_id, to\_addr}) \]
+\[ email\_attachments = (\underline{email\_id, attachment\_name},
+    attachment\_body) \]
+\[ email\_info = (\underline{email\_id}, send\_date, from\_addr, subject,
+    email\_body) \]
+\[ email\_attachment\_names = (\underline{email\_id, attachment\_name}) \]
+
+We have that for $email\_recipients$, $email\_id \twoheadrightarrow to\_addr$
+is a trivial multivalued dependency because
+$email\_id \hspace{1mm} \cup \hspace{1mm} to\_addr = email\_recipients$. And
+all other dependencies that apply are trivial .So
+that schema is in 4NF. Then, for $email\_attachments$, every multivalued
+dependency $\alpha \twoheadrightarrow \beta$ that applies to it has $\alpha$
+as a superkey for $email\_attachments$ ($email\_id, attachment\_name \rightarrow
+attachment\_body$).Then, for $email\_info$, every multivalued
+dependency $\alpha \twoheadrightarrow \beta$ that applies to it has $\alpha$
+as a superkey for $email\_info$, since the only dependencies that apply
+have $\alpha = email\_id$ and $email\_id$ is a superkey. Then, we have
+that for $email\_attachment\_names$, there are only trival dependencies. So
+all our schemas are in 4NF. Note that the last table is actually redudant
+so we will not consider it in the following section.
+
+The primary keys are underlined. We have a foreign key
+$email\_recipients[email\_id]$ references $email\_info[email\_id]$.
+We have a foreign key $email\_attachments[email\_id]$ references
+$email\_info[email\_id]$.
+\end{document}
