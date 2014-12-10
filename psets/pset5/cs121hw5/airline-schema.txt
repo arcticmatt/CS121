@@ -1,0 +1,70 @@
+USING 1 LATE TOKEN
+
+Write the relational model schema for your airline database in this file, using
+the notation we have used all term.  You can indicate primary key columns by
+enclosing the attribute names in _ characters.  Include descriptions of other
+candidate keys or foreign keys (if any) immediately under each relation schema.
+Example:
+
+foo(_a_, b, c)
+ * b is also a candidate key
+ * c is a foreign key to bar.c
+------------------------------------------------------------------------------
+
+-- [Problem 4]
+NOTE: RELATION denotes that the scheme came from a relation in the E-R diagram
+
+customer(_customer_id_, first_name, last_name, email)
+
+* customer_id is a foreign key to customer.customer_id
+customer_phone(_customer_id_, _phone_number_)
+
+* customer_id is a foreign key to customer.customer_id
+purchaser(_customer_id_, credit_card_number, expiration_date, verification_code)
+
+* customer_id is a foreign key to customer.customer_id
+traveler(_customer_id_, passport_number, citizenship_country, emergency_name,
+    emergency_phone_number, frequent_flyer_number)
+
+* confirmation_number is a candidate key
+purchase(_purchase_id_, purchase_date, confirmation_number)
+
+* RELATION
+* purchase_id and customer_id are foreign keys to purchase.purchase_id and
+* customer.customer_id, respectively
+txn(_purchase_id_, customer_id)
+
+ticket(_ticket_id_, sale_price)
+
+* RELATION
+* ticket_id and purchase_id are foreign keys to ticket.ticket_id and
+* purchase.purchase_id, respectively
+ticket_purchase(_ticket_id_, purchase_id)
+
+* RELATION
+* ticket_id and customer_id are foreign keys to ticket.ticket_id and
+* customer.customer_id, respectively
+ticket_traveler(_ticket_id_, customer_id)
+
+* type_code is a foreign key to aircraft.type_code
+seat(_type_code_, _seat_number_, seat_class, seat_type, is_exit)
+
+* RELATION
+* ticket_id and seat_number are foreign keys to ticket.ticket_id and
+* seat.seat_number, respectively
+ticket_seat(_ticket_id_, seat_number)
+
+flight(_flight_number_, _flight_date_, flight_time, source,
+    destination, is_domestic)
+
+aircraft(_type_code_, manufacturer, model)
+
+* RELATION
+* flight_number, flight_date, and type_code are foreign keys to
+* flight.flight_number, flight.flight_date, and aircraft.type_code, respectively
+itinerary(_flight_number_, _flight_date_, type_code)
+
+* RELATION
+* flight_number, flight_date, and ticket_id are foreign keys to
+* flight.flight_number, flight.flight_date, and ticket.ticket_id, respectively
+ticket_flight(_ticket_id_, flight_number, flight_date)

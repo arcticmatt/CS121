@@ -1,0 +1,3 @@
+mysqlimport -h checksum.cms.caltech.edu -u mlim -p --delete --local mlim_db raw_web_log.dat
+
+mysqlimport -h checksum.cms.caltech.edu/cs/courses/cs121 -u mlim -p --delete --local mlim_db raw_web_log.dat
